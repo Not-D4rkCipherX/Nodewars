@@ -658,22 +658,34 @@ class NodeWars:
 
                 user = await self.user_profile(query)
                 nodepay_point = user['availablePoints']
-                if user and nodepay_point > 0:
-                    claim = await self.claim_nodepay_point(query, session_id)
-                    if claim:
-                        claimable = claim['claimedPoint']
-                        self.log(
-                            f"{Fore.MAGENTA + Style.BRIGHT}[ Nodepay{Style.RESET_ALL}"
-                            f"{Fore.WHITE + Style.BRIGHT} {claimable} Points {Style.RESET_ALL}"
-                            f"{Fore.GREEN + Style.BRIGHT}Is Claimed{Style.RESET_ALL}"
-                            f"{Fore.MAGENTA + Style.BRIGHT} ]{Style.RESET_ALL}"
-                        )
-                    else:
-                        self.log(
-                            f"{Fore.MAGENTA + Style.BRIGHT}[ Nodepay{Style.RESET_ALL}"
-                            f"{Fore.RED + Style.BRIGHT} Isn't Claimed {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA + Style.BRIGHT}]{Style.RESET_ALL}"
-                        )
+                if user and nodepay_point >= 100:
+                    while True:
+                        if nodepay_point < 100:
+                            self.log(
+                                f"{Fore.MAGENTA + Style.BRIGHT}[ Nodepay{Style.RESET_ALL}"
+                                f"{Fore.YELLOW + Style.BRIGHT} No Available Points to Claim {Style.RESET_ALL}"
+                                f"{Fore.MAGENTA + Style.BRIGHT}]{Style.RESET_ALL}"
+                            )
+                            break
+
+                        claim = await self.claim_nodepay_point(query, session_id)
+                        if claim:
+                            nodepay_point -= 100
+                            claimable = claim['claimedPoint']
+                            self.log(
+                                f"{Fore.MAGENTA + Style.BRIGHT}[ Nodepay{Style.RESET_ALL}"
+                                f"{Fore.WHITE + Style.BRIGHT} {claimable} Points {Style.RESET_ALL}"
+                                f"{Fore.GREEN + Style.BRIGHT}Is Claimed{Style.RESET_ALL}"
+                                f"{Fore.MAGENTA + Style.BRIGHT} ]{Style.RESET_ALL}"
+                            )
+                        else:
+                            self.log(
+                                f"{Fore.MAGENTA + Style.BRIGHT}[ Nodepay{Style.RESET_ALL}"
+                                f"{Fore.RED + Style.BRIGHT} Isn't Claimed {Style.RESET_ALL}"
+                                f"{Fore.MAGENTA + Style.BRIGHT}]{Style.RESET_ALL}"
+                            )
+                        await asyncio.sleep(1)
+                        
                 else:
                     self.log(
                         f"{Fore.MAGENTA + Style.BRIGHT}[ Nodepay{Style.RESET_ALL}"
@@ -781,7 +793,7 @@ class NodeWars:
                         self.log(
                             f"{Fore.MAGENTA + Style.BRIGHT}[ Game{Style.RESET_ALL}"
                             f"{Fore.GREEN + Style.BRIGHT} Is Reached Max Level {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA + Style.BRIGHT}]{Style.RESET_ALL}"
+                            f"{Fore.MAGENTA + Style.BRIGHT}]{Style.RESET_ALL}                          "
                         )
 
                 else:
