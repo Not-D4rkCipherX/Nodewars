@@ -684,6 +684,8 @@ class NodeWars:
                                 f"{Fore.RED + Style.BRIGHT} Isn't Claimed {Style.RESET_ALL}"
                                 f"{Fore.MAGENTA + Style.BRIGHT}]{Style.RESET_ALL}"
                             )
+                            break
+                        
                         await asyncio.sleep(1)
                         
                 else:
